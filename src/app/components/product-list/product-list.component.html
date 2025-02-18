@@ -1,0 +1,215 @@
+<div class="card">
+  <p-toast></p-toast>
+  <p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <button
+        pButton
+        pRipple
+        label="Nuevo"
+        icon="pi pi-plus"
+        class="p-button-success mr-2"
+        (click)="openNew()"
+      ></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    [value]="products"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [paginator]="true"
+    [rows]="10"
+    [globalFilterFields]="['title', 'description', 'category']"
+    styleClass="p-datatable-gridlines"
+    responsiveLayout="scroll"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex justify-content-between flex-column sm:flex-row">
+        <h5 class="m-0">Manage Products</h5>
+        <span class="p-input-icon-left mb-2">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" placeholder="Search..." />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+        <th pSortableColumn="title">
+          Title <p-sortIcon field="title"></p-sortIcon>
+        </th>
+        <th pSortableColumn="price">
+          Price <p-sortIcon field="price"></p-sortIcon>
+        </th>
+        <th>Description</th>
+        <th pSortableColumn="category">
+          Category <p-sortIcon field="category"></p-sortIcon>
+        </th>
+        <th>Images</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td>{{ product.id }}</td>
+        <td>{{ product.title }}</td>
+        <td>{{ product.price | currency : "USD" }}</td>
+        <td>
+          {{ product.description | slice : 0 : 50
+          }}{{ product.description.length > 50 ? "..." : "" }}
+        </td>
+        <td>{{ product.category.name }}</td>
+        <td>
+          <p-carousel
+            [value]="product.images"
+            [numVisible]="1"
+            [numScroll]="1"
+            [circular]="false"
+            [responsiveOptions]="[
+              { breakpoint: '1024px', numVisible: 1, numScroll: 1 }
+            ]"
+            *ngIf="product.images && product.images.length > 0"
+          >
+            <ng-template let-image pTemplate="item">
+              <img
+                [src]="image"
+                [alt]="product.title"
+                class="product-image"
+                style="max-height: 75px; max-width: 100%"
+              />
+            </ng-template>
+          </p-carousel>
+          <span *ngIf="!product.images || product.images.length === 0"
+            >No images</span
+          >
+        </td>
+        <td>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-pencil"
+            class="p-button-rounded p-button-success mr-2"
+            (click)="editProduct(product)"
+          ></button>
+          <button
+            pButton
+            pRipple
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger"
+            (click)="deleteProduct(product)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{ products ? products.length : 0 }} products.
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="productDialog"
+  [style]="{ width: '450px' }"
+  header="Product Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <form [formGroup]="productForm">
+      <div class="field">
+        <label for="title">Title</label>
+        <input
+          type="text"
+          pInputText
+          id="title"
+          formControlName="title"
+          required
+          autofocus
+        />
+        <small
+          class="p-error"
+          *ngIf="submitted && productForm.controls['title'].errors?.['required']"
+          >Title is required.</small
+        >
+      </div>
+      <div class="field">
+        <label for="price">Price</label>
+        <p-inputNumber
+          id="price"
+          formControlName="price"
+          mode="currency"
+          currency="USD"
+          locale="en-US"
+        ></p-inputNumber>
+        <small
+          class="p-error"
+          *ngIf="submitted && productForm.controls['price'].errors?.['required']"
+          >Price is required.</small
+        >
+        <small
+          class="p-error"
+          *ngIf="submitted && productForm.controls['price'].errors?.['min']"
+          >Price must be greater than 0.</small
+        >
+      </div>
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea
+          id="description"
+          pInputTextarea
+          formControlName="description"
+          required
+          rows="3"
+          cols="20"
+        ></textarea>
+        <small
+          class="p-error"
+          *ngIf="submitted && productForm.controls['description'].errors?.['required']"
+          >Description is required.</small
+        >
+      </div>
+      <div class="field">
+        <label for="category">Category</label>
+        <p-inputNumber id="category" formControlName="category"></p-inputNumber>
+        <small
+          class="p-error"
+          *ngIf="submitted && productForm.controls['category'].errors?.['required']"
+          >Category is required.</small
+        >
+      </div>
+      <div class="field">
+        <label for="images">Image URLs (comma separated)</label>
+        <textarea
+          id="images"
+          pInputTextarea
+          formControlName="images"
+          rows="3"
+          cols="20"
+          placeholder="Enter image URLs separated by commas"
+        ></textarea>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="saveProduct()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
