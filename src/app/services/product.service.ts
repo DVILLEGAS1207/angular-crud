@@ -8,8 +8,12 @@ import { Product } from '../models/product.model';
 })
 export class ProductService {
   private apiUrl = 'https://api.escuelajs.co/api/v1/products';
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
+  // constructor(private http: HttpClient) {}
+  //promise vs observable
+  //promise = > te promete lo que va suceder aunque termine bien o mal
+  //observable => un canal de comunicacion =>observa el contenido que pasa por el canal
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);

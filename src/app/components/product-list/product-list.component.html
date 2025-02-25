@@ -5,7 +5,7 @@
       <button
         pButton
         pRipple
-        label="Nuevo"
+        label="New"
         icon="pi pi-plus"
         class="p-button-success mr-2"
         (click)="openNew()"
@@ -71,10 +71,11 @@
           >
             <ng-template let-image pTemplate="item">
               <img
-                [src]="image"
+                [ngSrc]="image"
                 [alt]="product.title"
                 class="product-image"
-                style="max-height: 75px; max-width: 100%"
+                width="60"
+                height="60"
               />
             </ng-template>
           </p-carousel>
@@ -170,12 +171,15 @@
         >
       </div>
       <div class="field">
-        <label for="category">Category</label>
-        <p-inputNumber id="category" formControlName="category"></p-inputNumber>
+        <label for="categoryId">Categoria</label>
+        <p-inputNumber
+          id="categoryId"
+          formControlName="categoryId"
+        ></p-inputNumber>
         <small
           class="p-error"
-          *ngIf="submitted && productForm.controls['category'].errors?.['required']"
-          >Category is required.</small
+          *ngIf="submitted && productForm.controls['categoryId'].errors?.['required']"
+          >Categoria es requerida.</small
         >
       </div>
       <div class="field">

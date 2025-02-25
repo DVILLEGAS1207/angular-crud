@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -44,6 +44,7 @@ import { Product } from '../../models/product.model';
     ConfirmDialogModule,
     CarouselModule,
     RippleModule,
+    NgOptimizedImage,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './product-list.component.html',
@@ -74,7 +75,7 @@ export class ProductListComponent implements OnInit {
       title: ['', [Validators.required]],
       price: [0, [Validators.required, Validators.min(0)]],
       description: ['', [Validators.required]],
-      category: [0, [Validators.required]],
+      categoryId: [0, [Validators.required]],
       images: [[]],
     });
   }
@@ -82,7 +83,12 @@ export class ProductListComponent implements OnInit {
   loadProducts(): void {
     this.productService.getProducts().subscribe({
       next: (data) => {
-        this.products = data;
+        this.products = data.map((product) => {
+          return {
+            ...product,
+            images: this.processImages(product.images),
+          };
+        });
       },
       error: (error) => {
         this.messageService.add({
@@ -94,6 +100,57 @@ export class ProductListComponent implements OnInit {
         console.error('Error loading products:', error);
       },
     });
+  }
+
+  processImages(images: any): string[] {
+    if (!images || !images.length) return [];
+
+    try {
+      // Si images ya es un array de strings
+      if (Array.isArray(images) && typeof images[0] === 'string') {
+        // Verifica si el primer elemento contiene JSON anidado
+        if (images[0].startsWith('[')) {
+          try {
+            const parsedImages = JSON.parse(images[0]);
+            if (Array.isArray(parsedImages)) {
+              return parsedImages.map((img: string) =>
+                this.cleanupImageUrl(img)
+              );
+            }
+          } catch (e) {
+            console.error('Failed to parse nested JSON string:', e);
+          }
+        }
+        // De lo contrario, limpia cada URL de imagen
+        return images.map((img: string) => this.cleanupImageUrl(img));
+      }
+
+      // Si images es una string que representa un array JSON
+      if (
+        typeof images === 'string' &&
+        (images.startsWith('[') || images.startsWith('"['))
+      ) {
+        try {
+          const cleanedImagesStr = images.replace(/^"|"$/g, '');
+          const parsedImages = JSON.parse(cleanedImagesStr);
+          if (Array.isArray(parsedImages)) {
+            return parsedImages.map((img: string) => this.cleanupImageUrl(img));
+          }
+        } catch (e) {
+          console.error('Failed to parse images string:', e);
+        }
+      }
+
+      return [];
+    } catch (error) {
+      console.error('Error processing images:', error);
+      return [];
+    }
+  }
+
+  cleanupImageUrl(url: string): string {
+    if (!url) return '';
+    return url.replace(/^"/, '').replace(/"$/, '');
   }
 
   openNew(): void {
