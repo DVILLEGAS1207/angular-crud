@@ -1,0 +1,30 @@
+<p-card header="Login" styleClass="p-shadow-6">
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="p-fluid">
+    <div class="p-field">
+      <label for="email">Email</label>
+      <input
+        pInputText
+        type="email"
+        id="email"
+        required
+        [(ngModel)]="email"
+        name="email"
+      />
+    </div>
+    <div class="p-field">
+      <label for="password">Password</label>
+      <input
+        pInputText
+        type="password"
+        id="password"
+        required
+        [(ngModel)]="password"
+        name="password"
+      />
+    </div>
+    <button pButton type="submit" label="Login" icon="pi pi-check"></button>
+    <div *ngIf="errorMessage" class="p-error">
+      {{ errorMessage }}
+    </div>
+  </form>
+</p-card>
