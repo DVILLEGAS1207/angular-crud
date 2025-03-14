@@ -1,4 +1,4 @@
-<div class="card">
+<!-- <div class="card">
   <p-toast></p-toast>
   <p-toolbar styleClass="mb-4 gap-2">
     <ng-template pTemplate="left">
@@ -15,7 +15,7 @@
 
   <p-table
     [value]="products"
-    [tableStyle]="{ 'min-width': '75rem' }"
+    [tableStyle]="{ 'min-width': '50rem' }"
     [paginator]="true"
     [rows]="10"
     [globalFilterFields]="['title', 'description', 'category']"
@@ -24,7 +24,7 @@
   >
     <ng-template pTemplate="caption">
       <div class="flex justify-content-between flex-column sm:flex-row">
-        <h5 class="m-0">Manage Products</h5>
+        <h5 class="m-0">MAdministracion de Productos</h5>
         <span class="p-input-icon-left mb-2">
           <i class="pi pi-search"></i>
           <input pInputText type="text" placeholder="Search..." />
@@ -59,6 +59,7 @@
         </td>
         <td>{{ product.category.name }}</td>
         <td>
+          @if (product.images && product.images.length > 0) {
           <p-carousel
             [value]="product.images"
             [numVisible]="1"
@@ -67,7 +68,6 @@
             [responsiveOptions]="[
               { breakpoint: '1024px', numVisible: 1, numScroll: 1 }
             ]"
-            *ngIf="product.images && product.images.length > 0"
           >
             <ng-template let-image pTemplate="item">
               <img
@@ -79,9 +79,9 @@
               />
             </ng-template>
           </p-carousel>
-          <span *ngIf="!product.images || product.images.length === 0"
-            >No images</span
-          >
+          } @if (!product.images || product.images.length === 0) {
+          <span>No images</span>
+          }
         </td>
         <td>
           <button
@@ -128,11 +128,9 @@
           required
           autofocus
         />
-        <small
-          class="p-error"
-          *ngIf="submitted && productForm.controls['title'].errors?.['required']"
-          >Title is required.</small
-        >
+        @if (submitted && productForm.controls['title'].errors?.['required']) {
+        <small class="p-error">Title is required.</small>
+        }
       </div>
       <div class="field">
         <label for="price">Price</label>
@@ -143,16 +141,11 @@
           currency="USD"
           locale="en-US"
         ></p-inputNumber>
-        <small
-          class="p-error"
-          *ngIf="submitted && productForm.controls['price'].errors?.['required']"
-          >Price is required.</small
-        >
-        <small
-          class="p-error"
-          *ngIf="submitted && productForm.controls['price'].errors?.['min']"
-          >Price must be greater than 0.</small
-        >
+        @if (submitted && productForm.controls['price'].errors?.['required']) {
+        <small class="p-error">Price is required.</small>
+        } @if (submitted && productForm.controls['price'].errors?.['min']) {
+        <small class="p-error">Price must be greater than 0.</small>
+        }
       </div>
       <div class="field">
         <label for="description">Description</label>
@@ -164,11 +157,10 @@
           rows="3"
           cols="20"
         ></textarea>
-        <small
-          class="p-error"
-          *ngIf="submitted && productForm.controls['description'].errors?.['required']"
-          >Description is required.</small
-        >
+        @if (submitted &&
+        productForm.controls['description'].errors?.['required']) {
+        <small class="p-error">Description is required.</small>
+        }
       </div>
       <div class="field">
         <label for="categoryId">Categoria</label>
@@ -176,11 +168,10 @@
           id="categoryId"
           formControlName="categoryId"
         ></p-inputNumber>
-        <small
-          class="p-error"
-          *ngIf="submitted && productForm.controls['categoryId'].errors?.['required']"
-          >Categoria es requerida.</small
-        >
+        @if (submitted &&
+        productForm.controls['categoryId'].errors?.['required']) {
+        <small class="p-error">Categoria es requerida.</small>
+        }
       </div>
       <div class="field">
         <label for="images">Image URLs (comma separated)</label>
@@ -216,4 +207,4 @@
   </ng-template>
 </p-dialog>
 
-<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog> -->

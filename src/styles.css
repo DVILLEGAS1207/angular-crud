@@ -1,10 +1,4 @@
+@import "./tailwind.css";
 @import "primeicons/primeicons.css";
-
-html,
-body {
-  height: 100%;
-}
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+@import "./app/assets/layout/layout.scss";
+@import "./app/assets/demo/demo.scss";
