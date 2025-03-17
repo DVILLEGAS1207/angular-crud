@@ -28,21 +28,30 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   errorMessage: string = '';
+  isLoading: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Por favor, ingrese todos los campos.';
+      return;
+    }
+
+    this.isLoading = true;
     this.authService
       .login({ email: this.email, password: this.password })
-      .subscribe(
-        (response) => {
+      .subscribe({
+        next: (response) => {
           console.log('Login successful, access token:', response.accessToken);
           this.router.navigate(['/dashboard']);
+          this.isLoading = false;
         },
-        (error) => {
+        error: (error) => {
           console.error('Login failed', error);
-          this.errorMessage = 'Invalid email or password';
-        }
-      );
+          this.errorMessage = 'Correo o contraseña inválidos.';
+          this.isLoading = false;
+        },
+      });
   }
 }

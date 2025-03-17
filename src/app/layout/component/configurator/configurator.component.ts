@@ -234,8 +234,8 @@ export class ConfiguratorComponent {
         this.layoutService.layoutConfig().preset as KeyOfType<typeof presets>
       ].primitive;
     const colors = [
+      'blue',
       'emerald',
-      'green',
       'lime',
       'orange',
       'amber',
@@ -243,7 +243,7 @@ export class ConfiguratorComponent {
       'teal',
       'cyan',
       'sky',
-      'blue',
+      'green',
       'indigo',
       'violet',
       'purple',

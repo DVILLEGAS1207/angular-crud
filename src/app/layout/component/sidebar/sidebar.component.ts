@@ -1,10 +1,10 @@
 import { Component, ElementRef } from '@angular/core';
 import { MenuComponent } from '../menu/menu.component';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, MenuComponent],
+  imports: [MenuComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
