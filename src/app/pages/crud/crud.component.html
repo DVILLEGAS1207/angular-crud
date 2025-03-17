@@ -148,6 +148,7 @@
 >
   <ng-template #content>
     <div class="flex flex-col gap-6">
+      @if (product.image) {
       <img
         [src]="
           'https://primefaces.org/cdn/primeng/images/demo/product/' +
@@ -155,8 +156,8 @@
         "
         [alt]="product.image"
         class="block m-auto pb-4"
-        *ngIf="product.image"
       />
+      }
       <div>
         <label for="name" class="block font-bold mb-3">Name</label>
         <input
@@ -168,9 +169,9 @@
           autofocus
           fluid
         />
-        <small class="text-red-500" *ngIf="submitted && !product.name"
-          >Name is required.</small
-        >
+        @if (submitted && !product.name) {
+        <small class="text-red-500">Name is required.</small>
+        }
       </div>
       <div>
         <label for="description" class="block font-bold mb-3"
