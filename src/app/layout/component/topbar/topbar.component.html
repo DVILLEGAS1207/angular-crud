@@ -84,18 +84,27 @@
 
     <div class="layout-topbar-menu hidden lg:block">
       <div class="layout-topbar-menu-content">
-        <button type="button" class="layout-topbar-action">
-          <i class="pi pi-calendar"></i>
-          <span>Calendar</span>
-        </button>
-        <button type="button" class="layout-topbar-action">
-          <i class="pi pi-inbox"></i>
-          <span>Messages</span>
-        </button>
-        <button type="button" class="layout-topbar-action">
+        <!-- <button type="button" class="layout-topbar-action">
           <i class="pi pi-user"></i>
-          <span>Profile</span>
-        </button>
+          <span>Perfil</span>
+        </button> -->
+        <p-dropdown
+          [options]="userOptions"
+          [(ngModel)]="selectedOption"
+          (onChange)="onOptionChange($event)"
+          placeholder="Opciones"
+        >
+          <ng-template pTemplate="selectedItem">
+            <i class="pi pi-user"></i>
+            <span>{{ selectedOption?.label }}</span>
+          </ng-template>
+          <ng-template let-option pTemplate="item">
+            <i [class]="option.icon"></i>
+            <span [ngClass]="{ 'text-red': option.label === 'Logout' }">{{
+              option.label
+            }}</span>
+          </ng-template>
+        </p-dropdown>
       </div>
     </div>
   </div>
