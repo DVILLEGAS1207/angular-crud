@@ -12,6 +12,7 @@ import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
+import { FloatingconfiguratorComponent } from '../../layout/component/floatingconfigurator/floatingconfigurator.component';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,7 @@ import { CommonModule } from '@angular/common';
     MessageModule,
     PasswordModule,
     ToastModule,
+    FloatingconfiguratorComponent,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
