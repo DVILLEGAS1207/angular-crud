@@ -2,27 +2,32 @@ import { Component } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { AuthService } from '../../services/auth.service';
 import { PasswordModule } from 'primeng/password';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     CardModule,
     InputTextModule,
     ButtonModule,
     MessageModule,
     PasswordModule,
+    ToastModule,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  providers: [MessageService],
 })
 export class LoginComponent {
   email: string = '';
@@ -30,11 +35,20 @@ export class LoginComponent {
   errorMessage: string = '';
   isLoading: boolean = false;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private messageService: MessageService
+  ) {}
 
-  onSubmit() {
+  onLogin(): void {
     if (!this.email || !this.password) {
-      this.errorMessage = 'Por favor, ingrese todos los campos.';
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill in all fields',
+      });
       return;
     }
 
@@ -42,15 +56,17 @@ export class LoginComponent {
     this.authService
       .login({ email: this.email, password: this.password })
       .subscribe({
-        next: (response) => {
-          console.log('Login successful, access token:', response.accessToken);
-          this.router.navigate(['/dashboard']);
+        next: () => {
           this.isLoading = false;
+          this.router.navigate(['/dashboard']);
         },
         error: (error) => {
-          console.error('Login failed', error);
-          this.errorMessage = 'Correo o contraseña inválidos.';
           this.isLoading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.error?.message || 'Login failed. Please try again.',
+          });
         },
       });
   }

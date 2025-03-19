@@ -15,7 +15,7 @@
     >
       <div
         class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20"
-        style="border-radius: 20px"
+        style="border-radius: 53px"
       >
         <div class="text-center mb-8">
           <svg
@@ -54,14 +54,14 @@
           <div
             class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4"
           >
-            Bienvenido a PrimeNg!
+            Bienvenido a la CSJ Junín
           </div>
           <span class="text-muted-color font-medium"
             >Iniciar Sesión para continuar</span
           >
         </div>
         <div>
-          <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+          <form (ngSubmit)="onLogin()" #loginForm="ngForm">
             <label
               for="email"
               class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2"
@@ -75,6 +75,7 @@
               required
               class="w-full md:w[30rem] mb-8"
               [(ngModel)]="email"
+              [disabled]="isLoading"
               name="email"
             />
 
@@ -90,6 +91,7 @@
               styleClass="mb-4"
               [fluid]="true"
               [feedback]="false"
+              [disabled]="isLoading"
               styleClass="mb-4"
               name="password"
             ></p-password>
@@ -97,6 +99,7 @@
             <p-button
               styleClass="w-full"
               type="submit"
+              [loading]="isLoading"
               label="Iniciar Sesión"
               icon="pi pi-check"
             ></p-button>
@@ -111,3 +114,48 @@
     </div>
   </div>
 </div>
+
+<!-- <div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <p-toast></p-toast>
+  <p-card class="w-full max-w-md">
+    <ng-template pTemplate="header">
+      <h1 class="text-2xl font-bold text-center p-4">Login</h1>
+    </ng-template>
+
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          pInputText
+          [(ngModel)]="email"
+          [disabled]="isLoading"
+          class="w-full"
+          placeholder="Enter your email"
+        />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="password">Password</label>
+        <p-password
+          id="password"
+          [(ngModel)]="password"
+          [disabled]="isLoading"
+          [feedback]="false"
+          [toggleMask]="true"
+          class="w-full"
+          placeholder="Enter your password"
+        ></p-password>
+      </div>
+
+      <button
+        pButton
+        label="Login"
+        [loading]="isLoading"
+        (click)="onLogin()"
+        class="w-full"
+      ></button>
+    </div>
+  </p-card>
+</div> -->

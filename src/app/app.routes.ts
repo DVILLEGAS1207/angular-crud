@@ -3,18 +3,18 @@ import { LoginComponent } from './components/login/login.component';
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './layout/component/layout/layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { AuthGuard } from './auth.guard';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
+import { authGuard, publicGuard } from './auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent, canActivate: [publicGuard] },
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [AuthGuard],
+    canActivate: [authGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
       { path: 'pages', loadChildren: () => import('./pages/pages.routes') },
     ],
   },
