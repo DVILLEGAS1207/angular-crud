@@ -16,7 +16,6 @@ export class ArticleService {
   getDrafts(): Observable<Article[]> {
     return this.http.get<Article[]>(`${this.apiUrl}/drafts`);
   }
-
   getArticle(id: number): Observable<Article> {
     return this.http.get<Article>(`${this.apiUrl}/${id}`);
   }
