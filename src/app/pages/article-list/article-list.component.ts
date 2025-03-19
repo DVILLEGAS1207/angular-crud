@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -13,15 +13,14 @@ import { ArticleService } from '../../services/article.service';
 @Component({
   selector: 'app-article-list',
   imports: [
-    CommonModule,
     TableModule,
     ButtonModule,
     DialogModule,
     InputTextModule,
     TextareaModule,
     CheckboxModule,
-    FormsModule,
-  ],
+    FormsModule
+],
   templateUrl: './article-list.component.html',
   styleUrl: './article-list.component.css',
 })

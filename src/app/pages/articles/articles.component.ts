@@ -5,7 +5,7 @@ import { ArticleService } from '../../services/article.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
-import { CommonModule } from '@angular/common';
+
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { TextareaModule } from 'primeng/textarea';
@@ -33,7 +33,6 @@ interface ExportColumn {
 @Component({
   selector: 'app-articles',
   imports: [
-    CommonModule,
     ButtonModule,
     FormsModule,
     RippleModule,
@@ -49,8 +48,8 @@ interface ExportColumn {
     TagModule,
     InputIconModule,
     IconFieldModule,
-    ConfirmDialogModule,
-  ],
+    ConfirmDialogModule
+],
   templateUrl: './articles.component.html',
   styleUrl: './articles.component.css',
   providers: [MessageService, ConfirmationService, ArticleService],
