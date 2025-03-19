@@ -34,6 +34,16 @@ export class MenuComponent {
             icon: 'pi pi-fw pi-pencil',
             routerLink: ['/pages/crud'],
           },
+          {
+            label: 'Artículos',
+            icon: 'pi pi-fw pi-box',
+            routerLink: ['/pages/articles'],
+          },
+          {
+            label: 'ListArtículos',
+            icon: 'pi pi-fw pi-box',
+            routerLink: ['/pages/article-list'],
+          },
         ],
       },
     ];

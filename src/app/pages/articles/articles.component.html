@@ -1,0 +1,210 @@
+<p-toolbar styleClass="mb-6">
+  <ng-template #start>
+    <p-button
+      label="Nuevo"
+      icon="pi pi-plus"
+      severity="secondary"
+      class="mr-2"
+      (onClick)="openNew()"
+    />
+    <p-button
+      severity="secondary"
+      label="Eliminar"
+      icon="pi pi-trash"
+      outlined
+      (onClick)="deleteSelectedArticles()"
+      [disabled]="!selectedArticles || !selectedArticles.length"
+    />
+  </ng-template>
+
+  <ng-template #end>
+    <p-button
+      label="Exportar"
+      icon="pi pi-upload"
+      severity="secondary"
+      (onClick)="exportCSV()"
+    />
+  </ng-template>
+</p-toolbar>
+<p-table
+  #dt
+  [value]="articles()"
+  [rows]="10"
+  [columns]="cols"
+  [paginator]="true"
+  [globalFilterFields]="[
+    'title',
+    'description',
+    'body',
+    'published',
+    'authorId'
+  ]"
+  [tableStyle]="{ 'min-width': '75rem' }"
+  [(selection)]="selectedArticles"
+  [rowHover]="true"
+  dataKey="id"
+  currentPageReportTemplate="Viendo {first} a {last} de {totalRecords} articulos"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[10, 20, 30]"
+>
+  <ng-template #caption>
+    <div class="flex items-center justify-between">
+      <h5 class="m-0">Administración de Artículos</h5>
+      <p-iconfield>
+        <p-inputicon styleClass="pi pi-search" />
+        <input
+          pInputText
+          type="text"
+          (input)="onGlobalFilter(dt, $event)"
+          placeholder="Search..."
+        />
+      </p-iconfield>
+    </div>
+  </ng-template>
+  <ng-template #header>
+    <tr>
+      <th style="width: 3rem">
+        <p-tableHeaderCheckbox />
+      </th>
+      <th style="min-width: 16rem">Id</th>
+      <th pSortableColumn="title" style="min-width: 16rem">
+        Titulo
+        <p-sortIcon field="title" />
+      </th>
+      <th pSortableColumn="description" style="min-width: 8rem">
+        Descripcion
+        <p-sortIcon field="description" />
+      </th>
+      <th pSortableColumn="body" style="min-width: 10rem">
+        Cuerpo
+        <p-sortIcon field="body" />
+      </th>
+      <th pSortableColumn="published" style="min-width: 12rem">
+        Publicado
+        <p-sortIcon field="published" />
+      </th>
+      <th pSortableColumn="authorId" style="min-width: 12rem">
+        Autor
+        <p-sortIcon field="authorId" />
+      </th>
+      <th style="min-width: 12rem"></th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-article>
+    <tr>
+      <td style="width: 3rem">
+        <p-tableCheckbox [value]="article" />
+      </td>
+      <td style="min-width: 12rem">{{ article.id }}</td>
+      <td style="min-width: 16rem">{{ article.title }}</td>
+      <td>{{ article.description }}</td>
+      <td>{{ article.body }}</td>
+      <td>
+        <p-tag
+          [value]="article.published ? 'PUBLICADO' : 'NO PUBLICADO'"
+          [severity]="getSeverity(article.published)"
+        ></p-tag>
+      </td>
+      <td>{{ article.authorId }}</td>
+      <td>
+        <p-button
+          icon="pi pi-pencil"
+          class="mr-2"
+          [rounded]="true"
+          [outlined]="true"
+          (click)="editArticle(article)"
+        />
+        <p-button
+          icon="pi pi-trash"
+          severity="danger"
+          [rounded]="true"
+          [outlined]="true"
+          (click)="deleteArticle(article)"
+        />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog
+  [(visible)]="articleDialog"
+  [style]="{ width: '450px' }"
+  header="Detalles de Artículo"
+  [modal]="true"
+>
+  <ng-template #content>
+    <div class="flex flex-col gap-6">
+      <div>
+        <label for="title" class="block font-bold mb-3">Title</label>
+        <input
+          type="text"
+          pInputText
+          id="title"
+          [(ngModel)]="article.title"
+          required
+          autofocus
+          fluid
+        />
+        @if (submitted && !article.title) {
+        <small class="text-red-500">Título es requirido.</small>
+        }
+      </div>
+      <div>
+        <label for="description" class="block font-bold mb-3"
+          >Description</label
+        >
+        <textarea
+          id="description"
+          pTextarea
+          [(ngModel)]="article.description"
+          required
+          rows="3"
+          cols="20"
+          fluid
+        ></textarea>
+      </div>
+      <div>
+        <label for="body" class="block font-bold mb-3">Body</label>
+        <textarea
+          id="body"
+          pTextarea
+          [(ngModel)]="article.body"
+          required
+          rows="3"
+          cols="20"
+          fluid
+        ></textarea>
+      </div>
+      <div>
+        <label for="published" class="block font-bold mb-3">Estado</label>
+        <p-select
+          [(ngModel)]="article.published"
+          inputId="published"
+          [options]="statuses"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Seleccione Estado"
+          fluid
+        />
+      </div>
+      <div>
+        <label for="authorId" class="block font-bold mb-3">Autor</label>
+        <input
+          type="number"
+          pInputText
+          id="authorId"
+          [(ngModel)]="article.authorId"
+          required
+          autofocus
+          fluid
+        />
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #footer>
+    <p-button label="Cancelar" icon="pi pi-times" text (click)="hideDialog()" />
+    <p-button label="Guardar" icon="pi pi-check" (click)="saveArticles()" />
+  </ng-template>
+</p-dialog>
+<p-confirmdialog [style]="{ width: '450px' }" />

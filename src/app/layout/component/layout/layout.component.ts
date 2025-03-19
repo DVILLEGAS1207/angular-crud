@@ -24,9 +24,9 @@ export class LayoutComponent {
 
   menuOutsideClickListener: any;
 
-  @ViewChild(SidebarComponent) appSidebar!: SidebarComponent;
+  @ViewChild(SidebarComponent) sidebarComponent!: SidebarComponent;
 
-  @ViewChild(TopbarComponent) appTopBar!: TopbarComponent;
+  @ViewChild(TopbarComponent) topbarComponent!: TopbarComponent;
 
   constructor(
     public layoutService: LayoutService,
